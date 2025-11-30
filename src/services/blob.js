@@ -4,7 +4,7 @@ import {
   BlobSASPermissions
 } from "@azure/storage-blob";
 import { msalInstance } from "../auth/msal";
-import { getKeyVaultSecret } from "./keyvault";
+import { storageConfig } from "../config/storage";
 
 export async function getUserDelegationSas(blobName) {
   // 1. Get authenticated user
@@ -16,9 +16,8 @@ export async function getUserDelegationSas(blobName) {
     account
   });
 
-  // 3. Pull secrets from Key Vault
-  const storageAccountName = await getKeyVaultSecret("storage-account-name");
-  const containerName = await getKeyVaultSecret("container-name");
+const storageAccountName = storageConfig.storageAccountName;
+const containerName = storageConfig.containerName;
 
   // 4. Connect to blob service using AAD token
   const blobServiceClient = new BlobServiceClient(
